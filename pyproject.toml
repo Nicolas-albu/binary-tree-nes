@@ -1,0 +1,58 @@
+[tool.poetry]
+name = "binary-tree-nes"
+version = "0.1.0"
+description = "Implementação da estrutura de árvore binária."
+authors = ["Nícolas Albuquerque Ramos <nicolas.albu@outlook.com>"]
+readme = "README.md"
+license = "MIT"
+packages = [{ include = "binary_tree" }]
+
+[tool.poetry.dependencies]
+python = "3.11.6"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^7.4.3"
+taskipy = "^1.12.2"
+ruff = "^0.1.7"
+blue = "^0.9.1"
+isort = "^5.12.0"
+
+[tool.ruff]
+line-length = 88
+select = [
+    "E",  # pycodestyle errors
+    "W",  # pycodestyle warnings
+    "F",  # pyflakes
+    "I",  # isort
+    "C",  # flake8-comprehensions
+    "B",  # flake8-bugbear
+    "UP", # pyupgrade
+]
+exclude = ['.venv']
+
+[tool.ruff.lint]
+select = ["D"]
+ignore = ["D100"]
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+
+[tool.ruff.format]
+quote-style = "single"
+
+[tool.isort]
+profile = "black"
+line_length = 88
+
+[tool.pytest.ini_options]
+pythonpath = "."
+
+[tool.taskipy.tasks]
+test = 'pytest -s -x --cov=binary_tree -vv'
+lint = 'ruff . && blue --check . --diff'
+format = 'blue .  && isort .'
+pre_test = 'task lint'
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
