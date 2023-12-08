@@ -52,7 +52,7 @@ pythonpath = "."
 lint = 'ruff . && blue --check . --diff'
 format = 'blue .  && isort .'
 test = 'pytest -s -x -v'
-pre_test = 'task lint'
+pre_test = 'task format'
 
 [build-system]
 requires = ["poetry-core"]
