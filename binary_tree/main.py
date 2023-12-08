@@ -26,7 +26,7 @@ class BinaryTree:
         self.__right_tree = right_tree
 
     @property
-    def root(self):
+    def value(self):
         """Retorna a raiz da (sub) árvore binária."""
         return self.__value
 
@@ -74,10 +74,10 @@ class BinaryTree:
 
     def __repr__(self):
         """Retorna uma representação em string da (sub) árvore binária."""
-        if self.root is None:
+        if self.value is None:
             return 'BinaryTree(None)'
 
         return (
-            f'BinaryTree({self.root}, left_tree={self.left_tree},'
+            f'BinaryTree({self.value}, left_tree={self.left_tree},'
             f' right_tree={self.right_tree})'
         )

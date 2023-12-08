@@ -14,24 +14,24 @@ def test_whether_the_tree_is_complete_from_the_to_binary_tree_method():
     list_ = [4, 2, 6, 1, 3, 5, 7]
     tree = BinaryTree.to_binary_tree(list_)
 
-    assert isinstance(tree, BinaryTree) and tree.root == 4
-    assert isinstance(tree.left_tree, BinaryTree) and tree.left_tree.root == 2
+    assert isinstance(tree, BinaryTree) and tree.value == 4
+    assert isinstance(tree.left_tree, BinaryTree) and tree.left_tree.value == 2
     assert (
-        isinstance(tree.right_tree, BinaryTree) and tree.right_tree.root == 6
+        isinstance(tree.right_tree, BinaryTree) and tree.right_tree.value == 6
     )
     assert (
         isinstance(tree.left_tree.left_tree, BinaryTree)
-        and tree.left_tree.left_tree.root == 1
+        and tree.left_tree.left_tree.value == 1
     )
     assert (
         isinstance(tree.left_tree.right_tree, BinaryTree)
-        and tree.left_tree.right_tree.root == 3
+        and tree.left_tree.right_tree.value == 3
     )
     assert (
         isinstance(tree.right_tree.left_tree, BinaryTree)
-        and tree.right_tree.left_tree.root == 5
+        and tree.right_tree.left_tree.value == 5
     )
     assert (
         isinstance(tree.right_tree.right_tree, BinaryTree)
-        and tree.right_tree.right_tree.root == 7
+        and tree.right_tree.right_tree.value == 7
     )
