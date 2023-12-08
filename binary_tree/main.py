@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from typing import Sequence
+
 
 class BinaryTree:
     """Classe responsável pela representação de uma (sub) árvore binária."""
@@ -7,7 +9,7 @@ class BinaryTree:
     def __init__(
         self,
         /,
-        value: float | None,
+        value: float | int | None,
         *,
         left_tree: 'BinaryTree' | None = None,
         right_tree: 'BinaryTree' | None = None,
@@ -26,23 +28,23 @@ class BinaryTree:
         self.__right_tree = right_tree
 
     @property
-    def value(self):
+    def value(self) -> float | int | None:
         """Retorna a raiz da (sub) árvore binária."""
         return self.__value
 
     @property
-    def left_tree(self):
+    def left_tree(self) -> 'BinaryTree' | None:
         """Retorna a sub árvore binária à esquerda."""
         return self.__left_tree
 
     @property
-    def right_tree(self):
+    def right_tree(self) -> 'BinaryTree' | None:
         """Retorna a sub árvore binária à direita."""
         return self.__right_tree
 
     @classmethod
     def to_binary_tree(
-        cls, /, list_: list[int] | list[float], *, node_index: int | None = 0
+        cls, /, list_: Sequence[int | float], *, node_index: int | None = 0
     ) -> 'BinaryTree':
         """Cria uma (sub) árvore binária.
 
