@@ -49,7 +49,7 @@ class BinaryTree:
         """Cria uma (sub) árvore binária.
 
         Args:
-            list_ (list[float]): Lista de valores a serem transformados em árvore
+            list_ (Sequence[float]): Lista de valores a serem transformados em árvore
                 binária.
             node_index (int, optional): Sub árvore binária à esquerda.
                 O padrão é 0.
@@ -65,6 +65,7 @@ class BinaryTree:
 
         if left_node >= len(list_):
             left_node = None
+
         if right_node >= len(list_):
             right_node = None
 
@@ -73,6 +74,38 @@ class BinaryTree:
             left_tree=cls.to_binary_tree(list_, node_index=left_node),
             right_tree=cls.to_binary_tree(list_, node_index=right_node),
         )
+
+    @staticmethod
+    def _to_list(tree: 'BinaryTree', tree_list: list[int | float]):
+        """Função auxiliar para percorrer a árvore e adicionar valores à lista.
+
+        Args:
+            tree (BinaryTree): (Sub) árvore binária.
+            tree_list (list[int | float]): Lista de valores da árvore binária.
+        """
+        if tree.left_tree and tree.left_tree.value is not None:
+            tree_list.append(tree.left_tree.value)
+
+        if tree.right_tree and tree.right_tree.value is not None:
+            tree_list.append(tree.right_tree.value)
+
+        for child_node in (tree.left_tree, tree.right_tree):
+            if child_node:
+                BinaryTree._to_list(child_node, tree_list)
+
+    def to_list(self) -> list[int | float]:
+        """Converte a árvore binária atual em uma lista.
+
+        Returns:
+            list[int | float]: Lista com os valores da árvore binária atual.
+        """
+        if self.__value is None:
+            return []
+
+        binary_tree_list = [self.__value]
+        self._to_list(self, binary_tree_list)
+
+        return binary_tree_list
 
     def __repr__(self):
         """Retorna uma representação em string da (sub) árvore binária."""
