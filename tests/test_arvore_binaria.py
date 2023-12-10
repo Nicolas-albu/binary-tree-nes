@@ -1,133 +1,223 @@
+import ipdb
+import pytest
+
 from binary_tree import BinaryTree
 
 
-def test_whether_the_tree_is_complete_from_the_to_binary_tree_method():
+@pytest.fixture
+def strictly_binary_tree():
+    """Retorna uma árvore estritamente binária.
+
+    Uma árvore estritamente binária é um tipo de árvore binária em que cada nó
+    tem 0 ou 2 filhos. Em outras palavras, cada nó é ou uma folha ou tem dois
+    filhos.
+    """
+    # [0.1, -1, 8.35, -2, 0.5]
+    yield BinaryTree(
+        0.1,
+        left_tree=BinaryTree(-1, left_tree=BinaryTree(-2), right_tree=BinaryTree(0.5)),
+        right_tree=BinaryTree(8.35),
+    )
+
+
+@pytest.fixture
+def complete_binary_tree():
+    """Retorna uma árvore estritamente binária.
+
+    Uma árvore binária em que todos os níveis, exceto possivelmente o último,
+    estão completamente preenchidos, e todos os nós são o mais à esquerda
+    possível.
+    """
+    # [-1, -2.3, -22_122e-20, 0, 0, -1.3, 7, -8]
+    yield BinaryTree(
+        -1,
+        left_tree=BinaryTree(
+            -2.3,
+            left_tree=BinaryTree(0, left_tree=BinaryTree(-8)),
+            right_tree=BinaryTree(0),
+        ),
+        right_tree=BinaryTree(
+            -22_122e-20, left_tree=BinaryTree(-1.3), right_tree=BinaryTree(7)
+        ),
+    )
+
+
+@pytest.fixture
+def perfect_binary_tree():
+    """Retorna uma árvore perfeita.
+
+    Uma árvore perfeita é uma árvore binária em que todos os níveis
+    estão completamente preenchidos.
+    """
+    # [0, 0.667, 19_202, 22_332e1, 1, 1, 1]
+    yield BinaryTree(
+        0,
+        left_tree=BinaryTree(
+            0.667, left_tree=BinaryTree(22_332e1), right_tree=BinaryTree(1)
+        ),
+        right_tree=BinaryTree(
+            19_202, left_tree=BinaryTree(1), right_tree=BinaryTree(1)
+        ),
+    )
+
+
+def test_strictly_binary_tree_to_binary_tree_method():
+    """Testa o método BinaryTree.to_binary_tree.
+
+    Verifca se o método está criando corretamente uma árvore estritamente binária.
+    """
+    list_tree = [0.1, -1, 8.35, -2, 0.5]
+    tree = BinaryTree.to_binary_tree(list_tree)
+
+    assert isinstance(tree, BinaryTree)
+    assert isinstance(tree.left_tree, BinaryTree)
+    assert isinstance(tree.right_tree, BinaryTree)
+    assert isinstance(tree.left_tree.left_tree, BinaryTree)
+    assert isinstance(tree.left_tree.right_tree, BinaryTree)
+
+    assert tree.value == 0.1
+    assert tree.left_tree.value == -1
+    assert tree.right_tree.value == 8.35
+    assert tree.left_tree.left_tree.value == -2
+    assert tree.left_tree.right_tree.value == 0.5
+
+
+def test_complete_binary_tree_to_binary_tree_method():
     """Testa o método BinaryTree.to_binary_tree.
 
     Verifca se o método está criando corretamente uma árvore binária completa.
     """
-    list_ = [4, 2, 6, 1, 3, 5, 7]
-    tree = BinaryTree.to_binary_tree(list_)
+    list_tree = [-1, -2.3, -22_122e-20, 0, 0, -1.3, 7, -8]
+    tree = BinaryTree.to_binary_tree(list_tree)
 
-    assert isinstance(tree, BinaryTree) and tree.value == 4
-    assert isinstance(tree.left_tree, BinaryTree) and tree.left_tree.value == 2
-    assert (
-        isinstance(tree.right_tree, BinaryTree) and tree.right_tree.value == 6
-    )
-    assert (
-        isinstance(tree.left_tree.left_tree, BinaryTree)
-        and tree.left_tree.left_tree.value == 1
-    )
-    assert (
-        isinstance(tree.left_tree.right_tree, BinaryTree)
-        and tree.left_tree.right_tree.value == 3
-    )
-    assert (
-        isinstance(tree.right_tree.left_tree, BinaryTree)
-        and tree.right_tree.left_tree.value == 5
-    )
-    assert (
-        isinstance(tree.right_tree.right_tree, BinaryTree)
-        and tree.right_tree.right_tree.value == 7
-    )
+    assert isinstance(tree, BinaryTree)
+    assert isinstance(tree.left_tree, BinaryTree)
+    assert isinstance(tree.right_tree, BinaryTree)
+    assert isinstance(tree.left_tree.left_tree, BinaryTree)
+    assert isinstance(tree.left_tree.right_tree, BinaryTree)
+    assert isinstance(tree.right_tree.left_tree, BinaryTree)
+    assert isinstance(tree.right_tree.right_tree, BinaryTree)
+    assert isinstance(tree.left_tree.left_tree.left_tree, BinaryTree)
+
+    assert tree.value == -1
+    assert tree.left_tree.value == -2.3
+    assert tree.right_tree.value == -22_122e-20
+    assert tree.left_tree.left_tree.value == 0
+    assert tree.left_tree.right_tree.value == 0
+    assert tree.right_tree.left_tree.value == -1.3
+    assert tree.right_tree.right_tree.value == 7
+    assert tree.left_tree.left_tree.left_tree.value == -8
 
 
-def test_whether_the_tree_is_incomplete_using_the_to_binary_tree_method():
+def test_perfect_binary_tree_to_binary_tree_method():
     """Testa o método BinaryTree.to_binary_tree.
 
-    Verifca se o método está criando corretamente uma árvore binária incompleta.
+    Verifca se o método está criando corretamente uma árvore binária perfeita.
     """
-    list_ = [10, 20, 3.6, 7.1, 8, 9]
-    tree = BinaryTree.to_binary_tree(list_)
+    list_tree = [0, 0.667, 19_202, 22_332e1, 1, 1, 1]
+    tree = BinaryTree.to_binary_tree(list_tree)
 
-    assert isinstance(tree, BinaryTree) and tree.value == 10
-    assert (
-        isinstance(tree.left_tree, BinaryTree) and tree.left_tree.value == 20
-    )
-    assert (
-        isinstance(tree.right_tree, BinaryTree)
-        and tree.right_tree.value == 3.6
-    )
-    assert (
-        isinstance(tree.left_tree.left_tree, BinaryTree)
-        and tree.left_tree.left_tree.value == 7.1
-    )
-    assert (
-        isinstance(tree.left_tree.right_tree, BinaryTree)
-        and tree.left_tree.right_tree.value == 8
-    )
-    assert (
-        isinstance(tree.right_tree.left_tree, BinaryTree)
-        and tree.right_tree.left_tree.value == 9
-    )
+    assert isinstance(tree, BinaryTree)
+    assert isinstance(tree.left_tree, BinaryTree)
+    assert isinstance(tree.right_tree, BinaryTree)
+    assert isinstance(tree.left_tree.left_tree, BinaryTree)
+    assert isinstance(tree.left_tree.right_tree, BinaryTree)
+    assert isinstance(tree.right_tree.left_tree, BinaryTree)
+    assert isinstance(tree.right_tree.right_tree, BinaryTree)
+
+    assert tree.value == 0
+    assert tree.left_tree.value == 0.667
+    assert tree.right_tree.value == 19_202
+    assert tree.left_tree.left_tree.value == 22_332e1
+    assert tree.left_tree.right_tree.value == 1
+    assert tree.right_tree.left_tree.value == 1
+    assert tree.right_tree.right_tree.value == 1
 
 
-def test_whether_tree_complete_to_list_method():
+def test_strictly_binary_tree_to_list_method(strictly_binary_tree):
+    """Testa o método BinaryTree.to_list.
+
+    Verifica se o método está retornando corretamente a árvore estritamente binária
+    na forma de lista.
+    """
+    assert strictly_binary_tree.to_list() == [0.1, -1, 8.35, -2, 0.5]
+
+
+def test_complete_binary_tree_to_list_method(complete_binary_tree):
     """Testa o método BinaryTree.to_list.
 
     Verifica se o método está retornando corretamente a árvore binária completa
     na forma de lista.
     """
-    sub_tree1 = BinaryTree(
-        0.875, left_tree=BinaryTree(20_112.334), right_tree=BinaryTree(111)
-    )
-    sub_tree2 = BinaryTree(
-        19_202, left_tree=BinaryTree(0), right_tree=BinaryTree(1)
-    )
-    binary_tree = BinaryTree(0.1, left_tree=sub_tree1, right_tree=sub_tree2)
+    assert complete_binary_tree.to_list() == [
+        -1,
+        -2.3,
+        -22_122e-20,
+        0,
+        0,
+        -1.3,
+        7,
+        -8,
+    ]
 
-    assert binary_tree.to_list() == [0.1, 0.875, 19_202, 20_112.334, 111, 0, 1]
 
-
-def test_whether_tree_incomplete_to_list_method():
+def test_perfect_binary_tree_to_list_method(perfect_binary_tree):
     """Testa o método BinaryTree.to_list.
 
-    Verifica se o método está retornando corretamente a árvore binária incompleta
+    Verifica se o método está retornando corretamente a árvore binária perfeita
     na forma de lista.
     """
-    sub_tree1 = BinaryTree(9, left_tree=BinaryTree(7.3))
-    sub_tree2 = BinaryTree(7)
-    binary_tree = BinaryTree(0, left_tree=sub_tree1, right_tree=sub_tree2)
+    assert perfect_binary_tree.to_list() == [
+        0,
+        0.667,
+        19_202,
+        22_332e1,
+        1,
+        1,
+        1,
+    ]
 
-    assert binary_tree.to_list() == [0, 9, 7, 7.3]
 
-
-def test_wheter_tree_complete_heapify_method():
+def test_strictly_binary_tree_heapify_method(strictly_binary_tree):
     """Testa o método BinaryTree.heapify.
 
     Verifica se o método está retornando corretamente o Max-Heap e Min-Heap
-    completa.
+    da árvore estritamente binária.
     """
-    # [0, 0.667, 19_202, 22_332e1, 1, 1, 1]
-    binary_tree = BinaryTree(
-        0,
-        left_tree=BinaryTree(
-            0.667,
-            left_tree=BinaryTree(22_332e1),
-            right_tree=BinaryTree(1),
-        ),
-        right_tree=BinaryTree(
-            19_202,
-            left_tree=BinaryTree(1),
-            right_tree=BinaryTree(1),
-        ),
-    )
+    # [0.1, -1, 8.35, -2, 0.5]
+    strictly_binary_tree.heapify()
 
-    binary_tree.heapify()
-
+    # [8.35, 0.5, 0.1, -2, -1]
     heap_tree = BinaryTree(
-        19_202,
+        8.35,
+        left_tree=BinaryTree(0.5, left_tree=BinaryTree(-2), right_tree=BinaryTree(-1)),
+        right_tree=BinaryTree(0.1),
+    )
+
+    assert strictly_binary_tree == heap_tree
+
+
+def test_complete_binary_tree_heapify_method(complete_binary_tree):
+    """Testa o método BinaryTree.heapify.
+
+    Verifica se o método está retornando corretamente o Max-Heap e Min-Heap
+    da árvore binária completa.
+    """
+    # [-1, -2.3, -22_122e-20, 0, 0, -1.3, 7, -8]
+    complete_binary_tree.heapify()
+
+    # [7, 0, -22_122e-20, -2.3, 0, -1.3, -1, -8]
+    heap_tree = BinaryTree(
+        7,
         left_tree=BinaryTree(
-            0.667,
-            left_tree=BinaryTree(22_332e1),
-            right_tree=BinaryTree(1),
+            0,
+            left_tree=BinaryTree(-2.3, left_tree=BinaryTree(-8)),
+            right_tree=BinaryTree(0),
         ),
         right_tree=BinaryTree(
-            1,
-            left_tree=BinaryTree(0),
-            right_tree=BinaryTree(1),
+            -22_122e-20, left_tree=BinaryTree(-1.3), right_tree=BinaryTree(-1)
         ),
     )
 
-    # assert binary_tree.to_list() == [19202, 0.667, 1, 223320.0, 1, 0, 1]
-    assert binary_tree == heap_tree
+    # assert complete_binary_tree.to_list() == heap_tree.to_list()
+    assert complete_binary_tree == heap_tree
