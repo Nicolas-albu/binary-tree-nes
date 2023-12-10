@@ -32,6 +32,16 @@ class BinaryTree:
         """Retorna a raiz da (sub) árvore binária."""
         return self.__value
 
+    @value.setter
+    def value(self, value: float | int | None):
+        """Define o valor da raiz da (sub) árvore binária.
+
+        Args:
+            value (float | int | None): Valor da raiz da (sub) árvore binária.
+        """
+        if value is not None:
+            self.__value = value
+
     @property
     def left_tree(self) -> 'BinaryTree' | None:
         """Retorna a sub árvore binária à esquerda."""
@@ -106,6 +116,47 @@ class BinaryTree:
         self._to_list(self, binary_tree_list)
 
         return binary_tree_list
+
+    def heapify(self):
+        """Converte a árvore binária atual em um Árvore Heap Min-Max."""
+        largest, actual_node = self.__value, self
+        left_node, right_node = self.__left_tree, self.__right_tree
+
+        if left_node and left_node.value is not None and left_node > largest:
+            largest, actual_node = left_node.value, left_node
+
+        if (
+            right_node
+            and right_node.value is not None
+            and right_node > largest
+        ):
+            largest, actual_node = right_node.value, right_node
+
+        if largest != self.__value:
+            self.__value, actual_node.value = largest, self.__value
+
+            actual_node.heapify()
+
+    def __eq__(self, other):
+        """Verifica se as (sub) árvore binárias são iguais."""
+        if not isinstance(other, BinaryTree):
+            return False
+
+        return self.to_list() == other.to_list()
+
+    def __gt__(self, other):
+        """Verifica se o primeiro valor da (sub) árvore binária é maior."""
+        if (
+            isinstance(other, BinaryTree)
+            and self.__value is not None
+            and other.value is not None
+        ):
+            return self.__value > other.value
+
+        if (
+            isinstance(other, int) or isinstance(other, float)
+        ) and self.__value is not None:
+            return self.__value > other
 
     def __repr__(self):
         """Retorna uma representação em string da (sub) árvore binária."""

@@ -90,3 +90,44 @@ def test_whether_tree_incomplete_to_list_method():
     binary_tree = BinaryTree(0, left_tree=sub_tree1, right_tree=sub_tree2)
 
     assert binary_tree.to_list() == [0, 9, 7, 7.3]
+
+
+def test_wheter_tree_complete_heapify_method():
+    """Testa o método BinaryTree.heapify.
+
+    Verifica se o método está retornando corretamente o Max-Heap e Min-Heap
+    completa.
+    """
+    # [0, 0.667, 19_202, 22_332e1, 1, 1, 1]
+    binary_tree = BinaryTree(
+        0,
+        left_tree=BinaryTree(
+            0.667,
+            left_tree=BinaryTree(22_332e1),
+            right_tree=BinaryTree(1),
+        ),
+        right_tree=BinaryTree(
+            19_202,
+            left_tree=BinaryTree(1),
+            right_tree=BinaryTree(1),
+        ),
+    )
+
+    binary_tree.heapify()
+
+    heap_tree = BinaryTree(
+        19_202,
+        left_tree=BinaryTree(
+            0.667,
+            left_tree=BinaryTree(22_332e1),
+            right_tree=BinaryTree(1),
+        ),
+        right_tree=BinaryTree(
+            1,
+            left_tree=BinaryTree(0),
+            right_tree=BinaryTree(1),
+        ),
+    )
+
+    # assert binary_tree.to_list() == [19202, 0.667, 1, 223320.0, 1, 0, 1]
+    assert binary_tree == heap_tree
