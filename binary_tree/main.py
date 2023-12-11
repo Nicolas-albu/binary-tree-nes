@@ -190,6 +190,6 @@ class BinaryTree:
             return 'BinaryTree(None)'
 
         return (
-            f'BinaryTree({self.value}, left_tree={self.left_tree},'
-            f' right_tree={self.right_tree})'
+            f'BinaryTree({self.value}, left_tree={self.left_tree.__repr__()},'
+            f' right_tree={self.right_tree.__repr__()})'
         )
