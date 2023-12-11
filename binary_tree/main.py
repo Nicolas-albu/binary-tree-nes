@@ -1,7 +1,8 @@
 from __future__ import annotations
 
+import heapq
 from collections import deque
-from typing import Literal, Sequence
+from typing import Sequence
 
 
 class BinaryTree:
@@ -111,32 +112,14 @@ class BinaryTree:
                     tree_list.append(child_node.value)
                     queue.append(child_node)
 
-    @staticmethod
-    def _heapify(
-        child_node: 'BinaryTree',
-        current_node: 'BinaryTree',
-        heap_state: Literal['max', 'min'],
-    ):
-        """Método auxiliar para heapificar uma (sub) árvore binária.
+    def heapify(self) -> 'BinaryTree' | None:
+        """Retorna a (sub) árvore binária transformada em Heap."""
+        if self.__value is None:
+            return
 
-        Compara cada nó com seus descendentes e realiza a troca de valores, de acordo
-        com o estado do heap atual, que varia a cada nível entre 'max' e 'min'.
-
-        Args:
-            child_node (BinaryTree): Sub árvore binária filha de `current_node`.
-            current_node (BinaryTree): (Sub) árvore binária pai de `child_node`.
-            heap_state (Literal['max', 'min']): Estado do heap atual.
-        """
-
-        def should_swap(node1, node2):
-            return node1 > node2 if heap_state == 'max' else node1 < node2
-
-        if should_swap(child_node, current_node):
-            current_node.value, child_node.value = (
-                child_node.value,
-                current_node.value,
-            )
-            # heap_state = 'min' if heap_state == 'max' else 'max'
+        list_tree = self.to_list().copy()
+        heapq.heapify(list_tree)
+        return BinaryTree.to_binary_tree(list_tree)
 
     def to_list(self) -> list[int | float]:
         """Converte a árvore binária atual em uma lista.
@@ -152,30 +135,26 @@ class BinaryTree:
 
         return binary_tree_list
 
-    def heapify(self, heap_state: Literal['max', 'min'] = 'max'):
-        """Converte a árvore binária atual em um Árvore Heap Max-Min."""
-        if self.__value is None:
-            return
-
-        if heap_state not in ('max', 'min'):
-            raise ValueError(f"{heap_state=!r} deve ser 'max' ou 'min'.")
-
-        queue = deque([self])
-        while queue:
-            current_node = queue.popleft()
-
-            for child_node in current_node.branches:
-                if child_node and child_node.value is not None:
-                    self._heapify(child_node, current_node, heap_state)
-
-                    queue.append(child_node)
-
     def __eq__(self, other):
         """Verifica se as (sub) árvore binárias são iguais."""
         if not isinstance(other, BinaryTree):
             return False
 
         return self.to_list() == other.to_list()
+
+    def __lt__(self, other):
+        """Verifica se o primeiro valor da (sub) árvore binária é menor."""
+        if (
+            isinstance(other, BinaryTree)
+            and self.__value is not None
+            and other.value is not None
+        ):
+            return self.__value < other.value
+
+        if isinstance(other, int | float) and self.__value is not None:
+            return self.__value < other
+
+        return False
 
     def __gt__(self, other):
         """Verifica se o primeiro valor da (sub) árvore binária é maior."""
@@ -190,6 +169,20 @@ class BinaryTree:
             return self.__value > other
 
         return False
+
+    def __str__(self, level: int = 0, prefix: str = 'ROOT: ') -> str:
+        """Retorna uma representação em string da (sub) árvore binária."""
+        if self.value is None:
+            return ''
+
+        tree_str = ' ' * (level * 4) + prefix + str(self.value) + '\n'
+
+        if self.left_tree:
+            tree_str += self.left_tree.__str__(level + 1, 'LEFT--> ')
+        if self.right_tree:
+            tree_str += self.right_tree.__str__(level + 1, 'RIGHT--> ')
+
+        return tree_str
 
     def __repr__(self):
         """Retorna uma representação em string da (sub) árvore binária."""

@@ -15,7 +15,9 @@ def strictly_binary_tree():
     # [0.1, -1, 8.35, -2, 0.5]
     yield BinaryTree(
         0.1,
-        left_tree=BinaryTree(-1, left_tree=BinaryTree(-2), right_tree=BinaryTree(0.5)),
+        left_tree=BinaryTree(
+            -1, left_tree=BinaryTree(-2), right_tree=BinaryTree(0.5)
+        ),
         right_tree=BinaryTree(8.35),
     )
 
@@ -181,17 +183,19 @@ def test_perfect_binary_tree_to_list_method(perfect_binary_tree):
 def test_strictly_binary_tree_heapify_method(strictly_binary_tree):
     """Testa o método BinaryTree.heapify.
 
-    Verifica se o método está retornando corretamente o Max-Heap e Min-Heap
-    da árvore estritamente binária.
+    Verifica se o método está retornando corretamente o Heap da árvore
+    estritamente binária.
     """
     # [0.1, -1, 8.35, -2, 0.5]
-    strictly_binary_tree.heapify()
+    strictly_binary_tree = strictly_binary_tree.heapify()
 
-    # [8.35, 0.5, 0.1, -2, -1]
+    # [-2, -1, 8.35, 0.1, 0.5]
     heap_tree = BinaryTree(
-        8.35,
-        left_tree=BinaryTree(0.5, left_tree=BinaryTree(-2), right_tree=BinaryTree(-1)),
-        right_tree=BinaryTree(0.1),
+        -2,
+        left_tree=BinaryTree(
+            -1, left_tree=BinaryTree(0.1), right_tree=BinaryTree(0.5)
+        ),
+        right_tree=BinaryTree(8.35),
     )
 
     assert strictly_binary_tree == heap_tree
@@ -200,24 +204,46 @@ def test_strictly_binary_tree_heapify_method(strictly_binary_tree):
 def test_complete_binary_tree_heapify_method(complete_binary_tree):
     """Testa o método BinaryTree.heapify.
 
-    Verifica se o método está retornando corretamente o Max-Heap e Min-Heap
-    da árvore binária completa.
+    Verifica se o método está retornando corretamente o Heap da árvore
+    binária completa.
     """
     # [-1, -2.3, -22_122e-20, 0, 0, -1.3, 7, -8]
-    complete_binary_tree.heapify()
+    complete_binary_tree = complete_binary_tree.heapify()
 
-    # [7, 0, -22_122e-20, -2.3, 0, -1.3, -1, -8]
+    # [-8, -2.3, -1.3, -1, 0, -22_122e-20, 7, 0]
     heap_tree = BinaryTree(
-        7,
+        -8,
         left_tree=BinaryTree(
-            0,
-            left_tree=BinaryTree(-2.3, left_tree=BinaryTree(-8)),
+            -2.3,
+            left_tree=BinaryTree(-1, left_tree=BinaryTree(0)),
             right_tree=BinaryTree(0),
         ),
         right_tree=BinaryTree(
-            -22_122e-20, left_tree=BinaryTree(-1.3), right_tree=BinaryTree(-1)
+            -1.3, left_tree=BinaryTree(-22_122e-20), right_tree=BinaryTree(7)
         ),
     )
 
-    # assert complete_binary_tree.to_list() == heap_tree.to_list()
     assert complete_binary_tree == heap_tree
+
+
+def test_perfect_binary_tree_heapify_method(perfect_binary_tree):
+    """Testa o método BinaryTree.heapify.
+
+    Verifica se o método está retornando corretamente o Heap da árvore
+    binária perfeita.
+    """
+    # [0, 0.667, 19_202, 22_332e1, 1, 1, 1]
+    perfect_binary_tree = perfect_binary_tree.heapify()
+
+    # [0, 0.667, 1, 22_332e1, 1, 1, 19_202]
+    heap_tree = BinaryTree(
+        0,
+        left_tree=BinaryTree(
+            0.667, left_tree=BinaryTree(22_332e1), right_tree=BinaryTree(1)
+        ),
+        right_tree=BinaryTree(
+            1, left_tree=BinaryTree(1), right_tree=BinaryTree(19_202)
+        ),
+    )
+
+    assert perfect_binary_tree == heap_tree
