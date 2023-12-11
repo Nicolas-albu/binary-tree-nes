@@ -17,6 +17,8 @@ tree2 = tree2.heapify()
 
 # Imprima a árvore binária
 print(tree2)
+# ou
+print(tree2.print_tree())
 # "Depois do tree2.heapify() acima ela está heapificada."
 #
 # ROOT: 0

@@ -135,6 +135,10 @@ class BinaryTree:
 
         return binary_tree_list
 
+    def print_tree(self):
+        """Imprime a árvore binária atual."""
+        return self.__str__()
+
     def __eq__(self, other):
         """Verifica se as (sub) árvore binárias são iguais."""
         if not isinstance(other, BinaryTree):
