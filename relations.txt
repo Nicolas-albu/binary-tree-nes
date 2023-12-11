@@ -1,0 +1,6 @@
+A classe BinaryTree é uma classe que representa uma árvore binária, ao qual as suas
+sub árvores binárias são instâncias de BinaryTree também.
+
+Esse relacionamento é de agregação:
+- Todos os BinaryTree podem ser sub árvores de qualquer outro BinaryTree.
+- E uma BinaryTree pode existir sem suas sub árvores BinaryTree.
